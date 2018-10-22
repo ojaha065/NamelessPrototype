@@ -19,10 +19,12 @@ public class Script_Hero : MonoBehaviour {
     private SpriteRenderer sp;
     private Animator animaattori;
     private Rigidbody2D rb;
+    private AudioSource jumpSound;
 
     // Lentäminen
     private bool ilmassa = false;
     private bool allowFlight = false;
+    private bool weAreJumping = false;
     private float aloitusKorkeus = -1;
     private float lopetusAika = -1;
 
@@ -33,6 +35,7 @@ public class Script_Hero : MonoBehaviour {
         sp = this.GetComponent<SpriteRenderer>();
         animaattori = this.GetComponent<Animator>();
         rb = this.GetComponent<Rigidbody2D>();
+        jumpSound = this.GetComponents<AudioSource>()[1];
 	}
 	
 	// Update is called once per frame
@@ -41,15 +44,18 @@ public class Script_Hero : MonoBehaviour {
         {
             if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W)) && !ilmassa)
             {
+                jumpSound.Play();
                 Vector2 force = new Vector2(jumpForceX, jumpForceY);
                 animaattori.SetInteger("Tila", 2);
                 rb.AddForce(force);
                 ilmassa = true;
-                allowFlight = false; // Lentäminen ei ala samalla painalluksella kuin hyppy
+                allowFlight = false; // Lento ei saa alkaa samalla painalluksella
+                weAreJumping = true;
             }
-            else if ((Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.W)) && aloitusKorkeus == -1)
+            else if ((Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.W)) && weAreJumping)
             {
                 allowFlight = true;
+                weAreJumping = false; // Muutetaan hyppy lentämiseksi
             }
         }
         else
@@ -64,6 +70,7 @@ public class Script_Hero : MonoBehaviour {
         {
             case "Floor":
                 ilmassa = false;
+                weAreJumping = false;
                 allowFlight = false;
                 aloitusKorkeus = -1;
                 lopetusAika = -1;
@@ -80,10 +87,7 @@ public class Script_Hero : MonoBehaviour {
                 break;
             case "BoostButton":
                 ilmassa = true;
-                allowFlight = false;
-                aloitusKorkeus = -1;
-                lopetusAika = -1;
-                rb.AddForce(new Vector2(0f,boostButtonForce));
+                rb.AddForce(new Vector2(0f, boostButtonForce));
                 break;
             default:
                 Debug.LogWarning("Pelaaja törmäsi triggeriin jolle ei ole käsittelijää.");
@@ -113,6 +117,10 @@ public class Script_Hero : MonoBehaviour {
                 }
                 transformi.Translate(-speed, 0f, 0f);
             }
+            else if(ilmassa && !weAreJumping && !allowFlight)
+            {
+                animaattori.SetInteger("Tila", 3);
+            }
             else if (!ilmassa)
             {
                 animaattori.SetInteger("Tila", 0);
@@ -123,10 +131,10 @@ public class Script_Hero : MonoBehaviour {
             }
 
             // Lentäminen
-            if((Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.W)) && ilmassa && allowFlight)
+            if((Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.W)) && allowFlight)
             {
                 // Tallennetaan lennon aloituskorkeus- ja aika, jolloin lento viimeistään katkaistaan.
-                if(aloitusKorkeus == -1)
+                if (aloitusKorkeus == -1)
                 {
                     aloitusKorkeus = transformi.position.y;
                     lopetusAika = Time.time + lentoAika; // Time.time pitää kirjaa ajasta sekunteina pelin alusta.
@@ -176,7 +184,7 @@ public class Script_Hero : MonoBehaviour {
     // Handlataan pelaajan kuoleminen
     private void YouDie()
     {
-        this.GetComponent<AudioSource>().Play();
+        this.GetComponents<AudioSource>()[0].Play();
         transformi.position = new Vector3(-13.6f,-5.5f);
     }
 }
