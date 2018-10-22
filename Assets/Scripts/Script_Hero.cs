@@ -27,9 +27,10 @@ public class Script_Hero : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKeyDown(KeyCode.Space) && !ilmassa)
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W)) && !ilmassa)
         {
             Vector2 force = new Vector2(jumpForceX,jumpForceY);
+            animaattori.SetInteger("Tila",2);
             rb.AddForce(force);
             ilmassa = true;
         }
@@ -37,7 +38,7 @@ public class Script_Hero : MonoBehaviour {
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.tag == "Floor")
+        if (collision.gameObject.tag.Contains("Floor"))
         {
             ilmassa = false;
         }
@@ -48,16 +49,22 @@ public class Script_Hero : MonoBehaviour {
         if (Input.GetKey(KeyCode.D))
         {
             sp.flipX = false;
-            animaattori.SetInteger("Tila", 1);
+            if (!ilmassa)
+            {
+                animaattori.SetInteger("Tila", 1);
+            }
             transformi.Translate(speed, 0f, 0f);
         }
         else if (Input.GetKey(KeyCode.A))
         {
             sp.flipX = true;
-            animaattori.SetInteger("Tila", 1);
+            if (!ilmassa)
+            {
+                animaattori.SetInteger("Tila", 1);
+            }
             transformi.Translate(-speed, 0f, 0f);
         }
-        else
+        else if (!ilmassa)
         {
             animaattori.SetInteger("Tila", 0);
         }
@@ -72,9 +79,17 @@ public class Script_Hero : MonoBehaviour {
         {
             kameranUusiPosition.x = -11f;
         }
+        else if (kameranUusiPosition.x > 11f)
+        {
+            kameranUusiPosition.x = 11f;
+        }
         if (kameranUusiPosition.y < -4.8f)
         {
             kameranUusiPosition.y = -4.8f;
+        }
+        else if (kameranUusiPosition.y > 5f)
+        {
+            kameranUusiPosition.y = 5f;
         }
 
         kameranTansform.position = kameranUusiPosition;
