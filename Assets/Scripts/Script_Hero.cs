@@ -9,6 +9,7 @@ public class Script_Hero : MonoBehaviour {
     public float jumpForceX;
     public float jumpForceY;
     public float boostButtonForce;
+    public float cameraOffsetX;
     public float cameraOffsetY;
     public float lentoAika;
 
@@ -19,7 +20,11 @@ public class Script_Hero : MonoBehaviour {
     private SpriteRenderer sp;
     private Animator animaattori;
     private Rigidbody2D rb;
+
+    // Äänet
     private AudioSource jumpSound;
+    private AudioSource flyingSound;
+    private AudioSource bounce;
 
     // Lentäminen
     private bool ilmassa = false;
@@ -36,7 +41,9 @@ public class Script_Hero : MonoBehaviour {
         animaattori = this.GetComponent<Animator>();
         rb = this.GetComponent<Rigidbody2D>();
         jumpSound = this.GetComponents<AudioSource>()[1];
-	}
+        flyingSound = this.GetComponents<AudioSource>()[2];
+        bounce = this.GetComponents<AudioSource>()[3];
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -86,7 +93,10 @@ public class Script_Hero : MonoBehaviour {
                 YouDie();
                 break;
             case "BoostButton":
+                bounce.Play();
                 ilmassa = true;
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = 0f;
                 rb.AddForce(new Vector2(0f, boostButtonForce));
                 break;
             default:
@@ -142,6 +152,7 @@ public class Script_Hero : MonoBehaviour {
                 if(transformi.position.y < aloitusKorkeus && Time.time < lopetusAika)
                 {
                     rb.AddForce(new Vector2(0f, 25f));
+                    flyingSound.Play();
                 }
                 else if(Time.time >= lopetusAika)
                 {
@@ -157,7 +168,7 @@ public class Script_Hero : MonoBehaviour {
             // Laitetaan kamera seuraamaan pelaajaa
             Vector3 kameranUusiPosition = kameranTansform.position;
 
-            kameranUusiPosition.x = transformi.position.x;
+            kameranUusiPosition.x = transformi.position.x + cameraOffsetX;
             kameranUusiPosition.y = transformi.position.y + cameraOffsetY;
 
             if (kameranUusiPosition.x < -11f)
