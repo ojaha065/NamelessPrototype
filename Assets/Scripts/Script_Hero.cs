@@ -8,6 +8,9 @@ public class Script_Hero : MonoBehaviour {
     public float speed;
     public float jumpForceX;
     public float jumpForceY;
+    public float cameraOffsetY;
+
+    public bool paused = false;
 
     private Transform transformi;
     private Transform kameranTansform;
@@ -27,71 +30,100 @@ public class Script_Hero : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W)) && !ilmassa)
+        if (!paused)
         {
-            Vector2 force = new Vector2(jumpForceX,jumpForceY);
-            animaattori.SetInteger("Tila",2);
-            rb.AddForce(force);
-            ilmassa = true;
+            if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W)) && !ilmassa)
+            {
+                Vector2 force = new Vector2(jumpForceX, jumpForceY);
+                animaattori.SetInteger("Tila", 2);
+                rb.AddForce(force);
+                ilmassa = true;
+            }
+        }
+        else
+        {
+            animaattori.SetInteger("Tila",0);
         }
 	}
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag.Contains("Floor"))
+        switch (collision.gameObject.tag)
         {
-            ilmassa = false;
+            case "Floor":
+                ilmassa = false;
+                break;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        switch (collision.gameObject.tag)
+        {
+            case "YouDie":
+                YouDie();
+                break;
         }
     }
 
     private void FixedUpdate()
     {
-        if (Input.GetKey(KeyCode.D))
+        if (!paused)
         {
-            sp.flipX = false;
-            if (!ilmassa)
+            if (Input.GetKey(KeyCode.D))
             {
-                animaattori.SetInteger("Tila", 1);
+                sp.flipX = false;
+                if (!ilmassa)
+                {
+                    animaattori.SetInteger("Tila", 1);
+                }
+                transformi.Translate(speed, 0f, 0f);
             }
-            transformi.Translate(speed, 0f, 0f);
-        }
-        else if (Input.GetKey(KeyCode.A))
-        {
-            sp.flipX = true;
-            if (!ilmassa)
+            else if (Input.GetKey(KeyCode.A))
             {
-                animaattori.SetInteger("Tila", 1);
+                sp.flipX = true;
+                if (!ilmassa)
+                {
+                    animaattori.SetInteger("Tila", 1);
+                }
+                transformi.Translate(-speed, 0f, 0f);
             }
-            transformi.Translate(-speed, 0f, 0f);
-        }
-        else if (!ilmassa)
-        {
-            animaattori.SetInteger("Tila", 0);
-        }
+            else if (!ilmassa)
+            {
+                animaattori.SetInteger("Tila", 0);
+            }
 
-        // Laitetaan kamera seuraamaan pelaajaa
-        Vector3 kameranUusiPosition = kameranTansform.position;
+            // Laitetaan kamera seuraamaan pelaajaa
+            Vector3 kameranUusiPosition = kameranTansform.position;
 
-        kameranUusiPosition.x = transformi.position.x;
-        kameranUusiPosition.y = transformi.position.y;
+            kameranUusiPosition.x = transformi.position.x;
+            kameranUusiPosition.y = transformi.position.y + cameraOffsetY;
 
-        if(kameranUusiPosition.x < -11f)
-        {
-            kameranUusiPosition.x = -11f;
-        }
-        else if (kameranUusiPosition.x > 11f)
-        {
-            kameranUusiPosition.x = 11f;
-        }
-        if (kameranUusiPosition.y < -4.8f)
-        {
-            kameranUusiPosition.y = -4.8f;
-        }
-        else if (kameranUusiPosition.y > 5f)
-        {
-            kameranUusiPosition.y = 5f;
-        }
+            if (kameranUusiPosition.x < -11f)
+            {
+                kameranUusiPosition.x = -11f;
+            }
+            else if (kameranUusiPosition.x > 11f)
+            {
+                kameranUusiPosition.x = 11f;
+            }
+            if (kameranUusiPosition.y < -4.8f)
+            {
+                kameranUusiPosition.y = -4.8f;
+            }
+            else if (kameranUusiPosition.y > 5f)
+            {
+                kameranUusiPosition.y = 5f;
+            }
 
-        kameranTansform.position = kameranUusiPosition;
+            kameranTansform.position = kameranUusiPosition;
+        }
+    }
+
+    // Handlataan pelaajan kuoleminen
+    private void YouDie()
+    {
+        this.GetComponent<AudioSource>().Play();
+        transformi.position = new Vector3(-13.6f,-5.5f);
     }
 }
