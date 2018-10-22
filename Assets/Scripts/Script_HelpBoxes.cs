@@ -34,6 +34,9 @@ public class Script_HelpBoxes : MonoBehaviour {
                 case "HelpBox_2":
                     teksti.text = "Watch out for those nasty spikes! Touching them is probably bad...\n\nOr what do I know, I'm just some random text.";
                     break;
+                case "HelpBox_3":
+                    teksti.text = "Well, this is a problem. If only could you fly... Maybe try double tapping the spacabar.\n\n(First jump, then jump again but keep the button pressed.)";
+                    break;
                 default:
                     Debug.LogError("Jokin men nyt pieleen!");
                     break;

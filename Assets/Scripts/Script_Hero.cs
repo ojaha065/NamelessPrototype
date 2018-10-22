@@ -8,7 +8,9 @@ public class Script_Hero : MonoBehaviour {
     public float speed;
     public float jumpForceX;
     public float jumpForceY;
+    public float boostButtonForce;
     public float cameraOffsetY;
+    public float lentoAika;
 
     public bool paused = false;
 
@@ -17,7 +19,12 @@ public class Script_Hero : MonoBehaviour {
     private SpriteRenderer sp;
     private Animator animaattori;
     private Rigidbody2D rb;
+
+    // Lentäminen
     private bool ilmassa = false;
+    private bool allowFlight = false;
+    private float aloitusKorkeus = -1;
+    private float lopetusAika = -1;
 
 	// Use this for initialization
 	void Start () {
@@ -38,6 +45,11 @@ public class Script_Hero : MonoBehaviour {
                 animaattori.SetInteger("Tila", 2);
                 rb.AddForce(force);
                 ilmassa = true;
+                allowFlight = false; // Lentäminen ei ala samalla painalluksella kuin hyppy
+            }
+            else if ((Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.W)) && aloitusKorkeus == -1)
+            {
+                allowFlight = true;
             }
         }
         else
@@ -52,6 +64,9 @@ public class Script_Hero : MonoBehaviour {
         {
             case "Floor":
                 ilmassa = false;
+                allowFlight = false;
+                aloitusKorkeus = -1;
+                lopetusAika = -1;
                 break;
         }
     }
@@ -62,6 +77,16 @@ public class Script_Hero : MonoBehaviour {
         {
             case "YouDie":
                 YouDie();
+                break;
+            case "BoostButton":
+                ilmassa = true;
+                allowFlight = false;
+                aloitusKorkeus = -1;
+                lopetusAika = -1;
+                rb.AddForce(new Vector2(0f,boostButtonForce));
+                break;
+            default:
+                Debug.LogWarning("Pelaaja törmäsi triggeriin jolle ei ole käsittelijää.");
                 break;
         }
     }
@@ -91,6 +116,34 @@ public class Script_Hero : MonoBehaviour {
             else if (!ilmassa)
             {
                 animaattori.SetInteger("Tila", 0);
+                if(Random.Range(1,50) == 1)
+                {
+                    animaattori.SetInteger("Tila_Idle", Random.Range(0, 3));
+                }
+            }
+
+            // Lentäminen
+            if((Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.W)) && ilmassa && allowFlight)
+            {
+                // Tallennetaan lennon aloituskorkeus- ja aika, jolloin lento viimeistään katkaistaan.
+                if(aloitusKorkeus == -1)
+                {
+                    aloitusKorkeus = transformi.position.y;
+                    lopetusAika = Time.time + lentoAika; // Time.time pitää kirjaa ajasta sekunteina pelin alusta.
+                }
+                if(transformi.position.y < aloitusKorkeus && Time.time < lopetusAika)
+                {
+                    rb.AddForce(new Vector2(0f, 25f));
+                }
+                else if(Time.time >= lopetusAika)
+                {
+                    allowFlight = false;
+                    aloitusKorkeus = -1;
+                    lopetusAika = -1;
+                }
+            }
+            {
+
             }
 
             // Laitetaan kamera seuraamaan pelaajaa

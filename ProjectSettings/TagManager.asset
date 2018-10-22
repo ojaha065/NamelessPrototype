@@ -9,6 +9,9 @@ TagManager:
   - HelpBox_1
   - YouDie
   - HelpBox_2
+  - Star
+  - HelpBox_3
+  - BoostButton
   layers:
   - Default
   - TransparentFX
