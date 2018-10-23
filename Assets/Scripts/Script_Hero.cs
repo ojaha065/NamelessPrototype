@@ -72,7 +72,16 @@ public class Script_Hero : MonoBehaviour {
         {
             animaattori.SetInteger("Tila",0);
         }
-	}
+
+        // Respawn
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = 0f;
+            transformi.position = spawnPoint;
+
+        }
+    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -105,6 +114,8 @@ public class Script_Hero : MonoBehaviour {
             case "Respawn":
                 Transform apu = collision.gameObject.GetComponent<Transform>();
                 spawnPoint = new Vector3(apu.position.x,apu.position.y);
+                break;
+            case "Trigger":
                 break;
             default:
                 Debug.LogWarning("Pelaaja törmäsi triggeriin jolle ei ole käsittelijää.");
@@ -208,15 +219,6 @@ public class Script_Hero : MonoBehaviour {
             }
 
             kameranTansform.position = kameranUusiPosition;
-        }
-
-        // Respawn
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = 0f;
-            transformi.position = spawnPoint;
-
         }
     }
 

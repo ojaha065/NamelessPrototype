@@ -20,12 +20,12 @@ public class Script_theBoss : MonoBehaviour {
     private void FixedUpdate()
     {
         JointMotor2D theMotor = theHinge.motor; // Haetaan liitoksen moottori
-        float uusiMotorSpeed = theMotor.motorSpeed + Random.Range(-1,5); // Lasketaan uusi moottorin nopeus
+        float uusiMotorSpeed = theMotor.motorSpeed + Random.Range(-1,3); // Lasketaan uusi moottorin nopeus
 
         // Estetään extreme-tilanteet
         if(uusiMotorSpeed <= 0 || uusiMotorSpeed > 300)
         {
-            uusiMotorSpeed = 100;
+            uusiMotorSpeed = 50;
         }
 
         theMotor.motorSpeed = uusiMotorSpeed; // Liitetään nopeus moottoriin
