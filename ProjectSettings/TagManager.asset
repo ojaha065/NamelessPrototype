@@ -12,6 +12,8 @@ TagManager:
   - Star
   - HelpBox_3
   - BoostButton
+  - HelpBox_4
+  - HelpBox_5
   layers:
   - Default
   - TransparentFX

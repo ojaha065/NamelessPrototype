@@ -14,6 +14,7 @@ public class Script_Hero : MonoBehaviour {
     public float lentoAika;
 
     public bool paused = false;
+    public bool noJumping = false;
 
     private Transform transformi;
     private Transform kameranTansform;
@@ -30,8 +31,10 @@ public class Script_Hero : MonoBehaviour {
     private bool ilmassa = false;
     private bool allowFlight = false;
     private bool weAreJumping = false;
-    private float aloitusKorkeus = -1;
+    private float aloitusKorkeus = -1000;
     private float lopetusAika = -1;
+
+    private Vector3 spawnPoint = new Vector3(-13.6f,-5.5f);
 
 	// Use this for initialization
 	void Start () {
@@ -49,7 +52,7 @@ public class Script_Hero : MonoBehaviour {
 	void Update () {
         if (!paused)
         {
-            if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W)) && !ilmassa)
+            if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W)) && !ilmassa && !noJumping)
             {
                 jumpSound.Play();
                 Vector2 force = new Vector2(jumpForceX, jumpForceY);
@@ -79,7 +82,7 @@ public class Script_Hero : MonoBehaviour {
                 ilmassa = false;
                 weAreJumping = false;
                 allowFlight = false;
-                aloitusKorkeus = -1;
+                aloitusKorkeus = -1000;
                 lopetusAika = -1;
                 break;
         }
@@ -98,6 +101,10 @@ public class Script_Hero : MonoBehaviour {
                 rb.velocity = Vector3.zero;
                 rb.angularVelocity = 0f;
                 rb.AddForce(new Vector2(0f, boostButtonForce));
+                break;
+            case "Respawn":
+                Transform apu = collision.gameObject.GetComponent<Transform>();
+                spawnPoint = new Vector3(apu.position.x,apu.position.y);
                 break;
             default:
                 Debug.LogWarning("Pelaaja törmäsi triggeriin jolle ei ole käsittelijää.");
@@ -144,7 +151,7 @@ public class Script_Hero : MonoBehaviour {
             if((Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.W)) && allowFlight)
             {
                 // Tallennetaan lennon aloituskorkeus- ja aika, jolloin lento viimeistään katkaistaan.
-                if (aloitusKorkeus == -1)
+                if (aloitusKorkeus == -1000)
                 {
                     aloitusKorkeus = transformi.position.y;
                     lopetusAika = Time.time + lentoAika; // Time.time pitää kirjaa ajasta sekunteina pelin alusta.
@@ -157,7 +164,7 @@ public class Script_Hero : MonoBehaviour {
                 else if(Time.time >= lopetusAika)
                 {
                     allowFlight = false;
-                    aloitusKorkeus = -1;
+                    aloitusKorkeus = -1000;
                     lopetusAika = -1;
                 }
             }
@@ -168,8 +175,16 @@ public class Script_Hero : MonoBehaviour {
             // Laitetaan kamera seuraamaan pelaajaa
             Vector3 kameranUusiPosition = kameranTansform.position;
 
-            kameranUusiPosition.x = transformi.position.x + cameraOffsetX;
             kameranUusiPosition.y = transformi.position.y + cameraOffsetY;
+
+            if(transformi.position.y < -0.85)
+            {
+                kameranUusiPosition.x = transformi.position.x + cameraOffsetX;
+            }
+            else
+            {
+                kameranUusiPosition.x = transformi.position.x - cameraOffsetX;
+            }
 
             if (kameranUusiPosition.x < -11f)
             {
@@ -190,12 +205,23 @@ public class Script_Hero : MonoBehaviour {
 
             kameranTansform.position = kameranUusiPosition;
         }
+
+        // Respawn
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = 0f;
+            transformi.position = spawnPoint;
+
+        }
     }
 
     // Handlataan pelaajan kuoleminen
     private void YouDie()
     {
         this.GetComponents<AudioSource>()[0].Play();
-        transformi.position = new Vector3(-13.6f,-5.5f);
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = 0f;
+        transformi.position = spawnPoint;
     }
 }
