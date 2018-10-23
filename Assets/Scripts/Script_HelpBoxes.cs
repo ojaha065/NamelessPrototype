@@ -41,7 +41,7 @@ public class Script_HelpBoxes : MonoBehaviour {
                     teksti.text = "Oh, did I forgot to tell you that you can't jump when standing on a golden block? Sorry about that...\n\nGot stuck? Press R key to respawn to last checkpoint.";
                     break;
                 case "HelpBox_5":
-                    teksti.text = "Tip: You can stay flying only for a second or so BUT have you noticed that the timer does not count the initial jump? Try combining long jump to a delayed start of the flight to cross longer distances.";
+                    teksti.text = "Tip: You can stay flying only for a second or so BUT have you noticed that the timer does not count the initial jump? Try combining a long jump to a delayed start of the flight to cross longer distances.";
                     break;
                 default:
                     Debug.LogError("Jokin men nyt pieleen!");

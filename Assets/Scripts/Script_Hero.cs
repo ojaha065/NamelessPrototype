@@ -181,9 +181,13 @@ public class Script_Hero : MonoBehaviour {
             {
                 kameranUusiPosition.x = transformi.position.x + cameraOffsetX;
             }
-            else
+            else if(transformi.position.y < 4.80)
             {
                 kameranUusiPosition.x = transformi.position.x - cameraOffsetX;
+            }
+            else
+            {
+                kameranUusiPosition.x = transformi.position.x;
             }
 
             if (kameranUusiPosition.x < -11f)
