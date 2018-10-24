@@ -23,7 +23,7 @@ public class Script_theBoss : MonoBehaviour {
         float uusiMotorSpeed = theMotor.motorSpeed + Random.Range(-1,3); // Lasketaan uusi moottorin nopeus
 
         // Estetään extreme-tilanteet
-        if(uusiMotorSpeed <= 0 || uusiMotorSpeed > 300)
+        if(uusiMotorSpeed <= 0 || uusiMotorSpeed > 200)
         {
             uusiMotorSpeed = 50;
         }

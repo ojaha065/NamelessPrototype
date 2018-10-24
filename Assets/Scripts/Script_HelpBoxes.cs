@@ -44,7 +44,7 @@ public class Script_HelpBoxes : MonoBehaviour {
                     teksti.text = "Tip: You can stay flying only for a second or so BUT have you noticed that the timer does not count the initial jump? Try combining a long jump to a delayed start of the flight to cross longer distances.";
                     break;
                 case "HelpBox_6":
-                    teksti.text = "Hooray!\n\nYou made is this far. Thank you for playing my little demo.";
+                    teksti.text = "Hooray!\n\nYou made is this far. Thank you for playing this little demo.\n\nContinue by jumping to the great unknown.";
                     break;
                 default:
                     Debug.LogError("Jokin men nyt pieleen!");

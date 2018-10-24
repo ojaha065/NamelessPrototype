@@ -74,7 +74,7 @@ public class Script_Hero : MonoBehaviour {
         }
 
         // Respawn
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R) && !paused)
         {
             rb.velocity = Vector3.zero;
             rb.angularVelocity = 0f;
