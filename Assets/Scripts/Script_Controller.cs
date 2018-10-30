@@ -28,6 +28,8 @@ public class Script_Controller : MonoBehaviour {
         triggerBossScript = triggerBoss.GetComponent<Script_Trigger>();
         triggerTheEndScript = triggerTheEnd.GetComponent<Script_Trigger>();
         FPS_text = GO_FPS_text.GetComponent<Text>();
+
+        PlayerPrefs.SetInt("kuolemat", 0);
 	}
 	
 	// Update is called once per frame
@@ -40,7 +42,7 @@ public class Script_Controller : MonoBehaviour {
         // FPS-laskuri
         if (Input.GetKeyDown(KeyCode.F))
         {
-            FPSCounterOn = !FPSCounterOn;
+            FPSCounterOn = !FPSCounterOn; // true --> false, false --> true
             FPS_Panel.SetActive(FPSCounterOn);
 
         }

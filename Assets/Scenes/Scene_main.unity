@@ -7439,6 +7439,11 @@ MonoBehaviour:
   lentoAika: 1
   paused: 0
   noJumping: 0
+  ilmassa: 0
+  allowFlight: 0
+  weAreJumping: 0
+  aloitusKorkeus: -1000
+  lopetusAika: -1
 --- !u!82 &1645162700
 AudioSource:
   m_ObjectHideFlags: 0
@@ -8633,19 +8638,19 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4697221441981454, guid: 7198783a8993beb46b275df80ca6e453, type: 2}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4697221441981454, guid: 7198783a8993beb46b275df80ca6e453, type: 2}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4697221441981454, guid: 7198783a8993beb46b275df80ca6e453, type: 2}
       propertyPath: m_LocalRotation.z
-      value: 0.057453305
+      value: -0.07854601
       objectReference: {fileID: 0}
     - target: {fileID: 4697221441981454, guid: 7198783a8993beb46b275df80ca6e453, type: 2}
       propertyPath: m_LocalRotation.w
-      value: 0.9983482
+      value: 0.9969105
       objectReference: {fileID: 0}
     - target: {fileID: 4697221441981454, guid: 7198783a8993beb46b275df80ca6e453, type: 2}
       propertyPath: m_RootOrder
@@ -8661,7 +8666,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4697221441981454, guid: 7198783a8993beb46b275df80ca6e453, type: 2}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 6.5870004
+      value: -9.01
       objectReference: {fileID: 0}
     - target: {fileID: 1901961837067256, guid: 7198783a8993beb46b275df80ca6e453, type: 2}
       propertyPath: m_Name

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Tämä on yleiskäyttöinen koodi joka liitetään kaikkiin triggereihin.
 public class Script_Trigger : MonoBehaviour {
 
     public bool triggered = false;

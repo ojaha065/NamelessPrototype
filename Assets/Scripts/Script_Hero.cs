@@ -28,11 +28,11 @@ public class Script_Hero : MonoBehaviour {
     private AudioSource bounce;
 
     // Lentäminen
-    private bool ilmassa = false;
-    private bool allowFlight = false;
-    private bool weAreJumping = false;
-    private float aloitusKorkeus = -1000;
-    private float lopetusAika = -1;
+    public bool ilmassa = false;
+    public bool allowFlight = false;
+    public bool weAreJumping = false;
+    public float aloitusKorkeus = -1000;
+    public float lopetusAika = -1;
 
     private Vector3 spawnPoint = new Vector3(-13.6f,-5.5f);
 
@@ -65,7 +65,7 @@ public class Script_Hero : MonoBehaviour {
             else if ((Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.W)) && weAreJumping)
             {
                 allowFlight = true;
-                weAreJumping = false; // Muutetaan hyppy lentämiseksi
+                weAreJumping = false;
             }
         }
         else
@@ -116,6 +116,7 @@ public class Script_Hero : MonoBehaviour {
                 spawnPoint = new Vector3(apu.position.x,apu.position.y);
                 break;
             case "Trigger":
+                // Triggerille on oma käsittelijänsä.
                 break;
             default:
                 Debug.LogWarning("Pelaaja törmäsi triggeriin jolle ei ole käsittelijää.");
@@ -152,7 +153,7 @@ public class Script_Hero : MonoBehaviour {
             else if (!ilmassa)
             {
                 animaattori.SetInteger("Tila", 0);
-                if(Random.Range(1,50) == 1)
+                if(Random.Range(1,75) == 1)
                 {
                     animaattori.SetInteger("Tila_Idle", Random.Range(0, 3));
                 }
@@ -162,7 +163,7 @@ public class Script_Hero : MonoBehaviour {
             if((Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.W)) && allowFlight)
             {
                 // Tallennetaan lennon aloituskorkeus- ja aika, jolloin lento viimeistään katkaistaan.
-                if (aloitusKorkeus == -1000)
+                if (aloitusKorkeus == -1000) // -1000 tarkoittaa, että aloituskorkeutta ei vielä ole määritetty.
                 {
                     aloitusKorkeus = transformi.position.y;
                     lopetusAika = Time.time + lentoAika; // Time.time pitää kirjaa ajasta sekunteina pelin alusta.
@@ -229,5 +230,6 @@ public class Script_Hero : MonoBehaviour {
         rb.velocity = Vector3.zero;
         rb.angularVelocity = 0f;
         transformi.position = spawnPoint;
+        PlayerPrefs.SetInt("kuolemat",PlayerPrefs.GetInt("kuolemat") + 1 );
     }
 }

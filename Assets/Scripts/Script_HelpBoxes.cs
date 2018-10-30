@@ -38,13 +38,33 @@ public class Script_HelpBoxes : MonoBehaviour {
                     teksti.text = "Well, this is a problem. If only could you fly... Maybe try double tapping the spacabar.\n\n(First jump, then jump again but keep the button pressed.)";
                     break;
                 case "HelpBox_4":
-                    teksti.text = "Oh, did I forgot to tell you that you can't jump when standing on a golden block? Sorry about that...\n\nGot stuck? Press R key to respawn to last checkpoint.";
+                    teksti.text = "Oh, did I forgot to tell you that you can't jump once you land on a golden block? Sorry about that...\n\nGot stuck? Press R key to respawn to last checkpoint.";
                     break;
                 case "HelpBox_5":
-                    teksti.text = "Tip: You can stay flying only for a second or so BUT have you noticed that the timer does not count the initial jump? Try combining a long jump to a delayed start of the flight to cross longer distances.";
+                    teksti.text = "Tip: You can fly only for a second or so BUT have you noticed that the initial jump does not count? Try combining a long jump with a delayed start of the flight to cross longer distances.";
                     break;
                 case "HelpBox_6":
-                    teksti.text = "Hooray!\n\nYou made is this far. Thank you for playing this little demo.\n\nContinue by jumping to the great unknown.";
+                    int kuolemat = PlayerPrefs.GetInt("kuolemat");
+                    if(kuolemat <= 0)
+                    {
+                        teksti.text = "Hooray!\n\nYou made it this far. And you did it without dying even once?!?\n\nContinue by jumping to the great unknown below.";
+                    }
+                    else if(kuolemat == 1)
+                    {
+                        teksti.text = "Hooray!\n\nYou made it this far.\n\nDuring you adventure you died one time. That's very good!\n\nThank you for playing this little demo.\n\nContinue by jumping to the great unknown below.";
+                    }
+                    else if(kuolemat >= 35)
+                    {
+                        teksti.text = "You finally made it this far.\n\nDuring you adventure you died " + kuolemat + " times. You're not a gamer, are you?\n\nContinue by jumping to the great unknown below.";
+                    }
+                    else if(kuolemat > 100)
+                    {
+                        teksti.text = "!?!\n\nYou made it this far but on the way you died over a hundred times...\n\nContinue by jumping to the great unknown below.";
+                    }
+                    else
+                    {
+                        teksti.text = "Hooray!\n\nYou made it this far. Thank you for playing this little demo.\n\nDuring you adventure you died " + PlayerPrefs.GetInt("kuolemat") + " times.\n\nContinue by jumping to the great unknown below.";
+                    }
                     break;
                 default:
                     Debug.LogError("Jokin men nyt pieleen!");

@@ -2,26 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Script_Credits : MonoBehaviour {
+public class Script_Credits : MonoBehaviour
+{
 
     public float creditsSpeed;
     public GameObject panel;
 
     private Transform transformi;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         transformi = panel.GetComponent<Transform>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 
     private void FixedUpdate()
     {
-        if(true) // TODO
+        // Rullataan lopputekstejä ylös
+        if (true) // Tässä pitäisi pysäyttää rullaaminen kun kaikki tekstit on rullattu.
         {
             if (Input.GetKey(KeyCode.Space))
             {

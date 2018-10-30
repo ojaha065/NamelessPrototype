@@ -21,6 +21,11 @@ public class Script_noJumping : MonoBehaviour {
         if(collision.gameObject.tag == "Player")
         {
             playerScript.noJumping = true;
+            playerScript.ilmassa = false;
+            playerScript.weAreJumping = false;
+            playerScript.allowFlight = false;
+            playerScript.aloitusKorkeus = -1000;
+            playerScript.lopetusAika = -1;
         }
     }
 
