@@ -25,21 +25,24 @@ public class Script_Credits : MonoBehaviour
     private void FixedUpdate()
     {
         // Rullataan lopputekstejä ylös
-        if (true) // Tässä pitäisi pysäyttää rullaaminen kun kaikki tekstit on rullattu.
+        if (Input.GetKey(KeyCode.Space))
         {
-            if (Input.GetKey(KeyCode.Space))
-            {
-                transformi.Translate(0f, creditsSpeed * 3, 0f);
-            }
-            else
-            {
-                transformi.Translate(0f, creditsSpeed, 0f);
-            }
+            transformi.Translate(0f, creditsSpeed * 3, 0f);
+        }
+        else
+        {
+            transformi.Translate(0f, creditsSpeed, 0f);
         }
 
         if (Input.GetKey(KeyCode.Escape))
         {
-            Application.Quit();
+            #if (UNITY_EDITOR)
+                UnityEditor.EditorApplication.isPlaying = false;
+            #elif (UNITY_STANDALONE) 
+                Application.Quit();
+            #elif (UNITY_WEBGL)
+                Application.OpenURL("about:blank");
+            #endif
         }
     }
 }
